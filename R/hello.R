@@ -167,3 +167,30 @@ samplize <- function(x, is_valid = FALSE, p = c(4, 1)){
     return(rtn)
   }
 }
+
+kfold.xgb <- function (ds,cl, fold=10, max_depth = 2, eta = 1, nthread = 2, nrounds = 2, objective = "binary:logistic") {
+  library(caret)   # for createFolds
+  library(xgboost)
+  set.seed(100)
+  k.fold <-createFolds(as.vector(cl),k=fold)
+  cl = factor(cl)
+  acc = c()              # classification result
+  for (i in 1:fold) {
+    this.fold = k.fold[[i]]
+    train.ds = ds[-c(this.fold),]
+    train.cl = cl[-c(this.fold)]
+    test.ds  = ds[c(this.fold),]
+    test.cl  = cl[c(this.fold)]
+    model = xgboost(as.matrix(train.ds),as.matrix(train.cl),
+                    max_depth = max_depth, eta = eta, nthread = nthread,
+                    nrounds = nrounds, objective = objective)
+    pred = predict(model, test.ds)
+    result = as.integer(pred > 0.5)
+    acc[i] = mean(result==test.cl)
+
+  }
+
+  return(mean(acc))  # average accuracy of k=fold test
+
+}
+
