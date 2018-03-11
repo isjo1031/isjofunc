@@ -14,7 +14,8 @@
 #   Test Package:              'Ctrl + Shift + T'
 
 hello <- function() {
-  print("Hello, world!")
+  print("Hello, This is the function packages for Insik's data Mining!
+        There are useful functions for data analysis.")
 }
 
 detach_package <- function(pkg, character.only = FALSE)
@@ -111,7 +112,7 @@ kfold.rf <- function (ds,cl, fold=10) {
   return(mean(acc))  # average accuracy of k=fold test
 }
 
-kfold.svm <- function (ds,cl, fold=10) {
+kfold.svm <- function (ds,cl, fold=10, ker = "radial") {
   library(caret)   # for createFolds
   library("e1071")          # for SVM
   set.seed(100)
@@ -124,7 +125,7 @@ kfold.svm <- function (ds,cl, fold=10) {
     train.cl = cl[-c(this.fold)]
     test.ds  = ds[c(this.fold),]
     test.cl  = cl[c(this.fold)]
-    model = svm(train.ds,train.cl)
+    model = svm(train.ds,train.cl, kernel = ker)
     result = predict(model, test.ds)
     acc[i] = mean(result==test.cl)
 
@@ -193,4 +194,3 @@ kfold.xgb <- function (ds,cl, fold=10, max_depth = 2, eta = 1, nthread = 2, nrou
   return(mean(acc))  # average accuracy of k=fold test
 
 }
-
