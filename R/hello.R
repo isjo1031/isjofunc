@@ -119,6 +119,8 @@ kfold.knn <- function (ds,cl, fold=10, k.value=3, all.index = FALSE) {
   k.fold <-createFolds(as.vector(cl),k=fold)
 
   acc = c()              # classification result
+  rcl = c() #recall
+  pre = c() #precision
   for (i in 1:fold) {
     this.fold = k.fold[[i]]
     train.ds = ds[-c(this.fold),]
@@ -154,6 +156,8 @@ kfold.rf <- function (ds,cl, fold=10, all.index = FALSE) {
   k.fold <-createFolds(as.vector(cl),k=fold)
   cl = factor(cl)
   acc = c()              # classification result
+  rcl = c() #recall
+  pre = c() #precision
   for (i in 1:fold) {
     this.fold = k.fold[[i]]
     train.ds = ds[-c(this.fold),]
@@ -188,6 +192,8 @@ kfold.svm <- function (ds,cl, fold=10, ker = "radial", all.index = FALSE) {
   k.fold <-createFolds(as.vector(cl),k=fold)
   cl = factor(cl)
   acc = c()              # classification result
+  rcl = c() #recall
+  pre = c() #precision
   for (i in 1:fold) {
     this.fold = k.fold[[i]]
     train.ds = ds[-c(this.fold),]
