@@ -229,8 +229,10 @@ kfold.xgb <- function (ds,cl, fold=10, max_depth = 2, eta = 1, nthread = 2, nrou
   library(xgboost)
   set.seed(100)
   k.fold <-createFolds(as.vector(cl),k=fold)
-  cl = factor(cl)
+  cl = as.factor(cl)
   acc = c()              # classification result
+  rcl = c() #recall
+  pre = c() #precision
   for (i in 1:fold) {
     this.fold = k.fold[[i]]
     train.ds = ds[-c(this.fold),]
@@ -241,7 +243,7 @@ kfold.xgb <- function (ds,cl, fold=10, max_depth = 2, eta = 1, nthread = 2, nrou
                     max_depth = max_depth, eta = eta, nthread = nthread,
                     nrounds = nrounds, objective = objective)
     pred = predict(model, test.ds)
-    result = as.integer(pred > 0.5)
+    result = as.factor(as.integer(pred > 0.5))
     acc[i] = mean(result==test.cl)
     rcl[i] = recall(result, test.cl) #
     pre[i] = precision(result, test.cl) #
@@ -258,6 +260,4 @@ kfold.xgb <- function (ds,cl, fold=10, max_depth = 2, eta = 1, nthread = 2, nrou
     names(rtn) = c("accuracy", "recall", "precision")
     return(rtn)
   }
-
-
 }
